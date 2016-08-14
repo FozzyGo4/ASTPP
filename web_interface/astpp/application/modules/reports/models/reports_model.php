@@ -39,8 +39,8 @@ ASTPP  3.0
             $where['callstart <=']=date("Y-m-d")." 23:59:59";
         }
 
-        $types = array('0','3');
-        $this->db->or_where_in('type', $types);    
+        //$types = array('0','3');
+        //$this->db->or_where_in('type', $types);    
 
         $this->db->where($where);
         if (isset($_GET['sortname']) && $_GET['sortname'] != 'undefined'){
