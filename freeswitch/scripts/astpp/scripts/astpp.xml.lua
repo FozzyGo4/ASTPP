@@ -202,33 +202,42 @@ function freeswitch_xml_inbound(xml,didinfo,userinfo,config,xml_did_rates)
 		table.insert(xml, [[<action application="set" data="calltype=STANDARD"/>]]);     
 		table.insert(xml, [[<action application="set" data="accountcode=]]..didinfo['account_code']..[["/>]]);
 		table.insert(xml, [[<action application="set" data="caller_did_account_id=]]..userinfo['id']..[["/>]]);
-        table.insert(xml, [[<action application="set" data="origination_rates_did=]]..xml_did_rates..[["/>]]);
+        	table.insert(xml, [[<action application="set" data="origination_rates_did=]]..xml_did_rates..[["/>]]);
 		table.insert(xml, [[<action application="transfer" data="]]..didinfo['extensions']..[[ XML default"/>]]);
 
 	elseif (tonumber(didinfo['call_type']) == 1 and didinfo['extensions'] ~= '') then
-
 		table.insert(xml, [[<action application="set" data="calltype=DID-LOCAL"/>]]);     
 
-        if (config['opensips'] == '1') then
-          table.insert(xml, [[<action application="bridge" data="user/]]..didinfo['extensions']..[[@${domain_name}"/>]]);
-          --table.insert(xml, [[<action application="answer"/>]]);    
-    	  table.insert(xml, [[<action application="export" data="voicemail_alternate_greet_id=]]..destination_number..[["/>]]);  
-		  table.insert(xml, [[<action application="voicemail" data="default $${domain_name} ]]..didinfo['extensions']..[["/>]]);    
-        else      
-    	  table.insert(xml, [[<action application="bridge" data="{sip_invite_params=user=LOCAL,sip_from_uri=]]..didinfo['extensions']..[[@${domain_name}}sofia/default/]]..didinfo['extensions']..[[@]]..config['opensips_domain']..[["/>]]);
-        end
+	        if (config['opensips'] == '1') then
+	          table.insert(xml, [[<action application="bridge" data="user/]]..didinfo['extensions']..[[@${domain_name}"/>]]);
+	          --table.insert(xml, [[<action application="answer"/>]]);    
+	    	  table.insert(xml, [[<action application="export" data="voicemail_alternate_greet_id=]]..destination_number..[["/>]]);  
+			  table.insert(xml, [[<action application="voicemail" data="default $${domain_name} ]]..didinfo['extensions']..[["/>]]);    
+	        else      
+	    	  table.insert(xml, [[<action application="bridge" data="{sip_invite_params=user=LOCAL,sip_from_uri=]]..didinfo['extensions']..[[@${domain_name}}sofia/default/]]..didinfo['extensions']..[[@]]..config['opensips_domain']..[["/>]]);
+	        end
 
-	 elseif (tonumber(didinfo['call_type']) == 3 and didinfo['extensions'] ~= '') then
 
+	elseif(tonumber(didinfo['call_type']) == 2 and didinfo['extensions'] ~= '') then
+		table.insert(xml, [[<action application="set" data="calltype=OTHER"/>]]); 
+		table.insert(xml, [[<action application="bridge" data="]]..didinfo['extensions']..[["/>]]);
+
+ 	elseif (tonumber(didinfo['call_type']) == 3 and didinfo['extensions'] ~= '') then
 		table.insert(xml, [[<action application="set" data="calltype=SIP-DID"/>]]);     
 		table.insert(xml, [[<action application="bridge" data="{sip_contact_user=]]..destination_number..[[}sofia/default/]]..destination_number..[[${regex(${sofia_contact(]]..didinfo['extensions']..[[@${domain_name})}|^[^@]+(.*)|%1)}]]..[["/>]]); 
 		--table.insert(xml, [[<action application="answer"/>]]);    
 		table.insert(xml, [[<action application="export" data="voicemail_alternate_greet_id=]]..destination_number..[["/>]]);  
 		table.insert(xml, [[<action application="voicemail" data="default $${domain_name} ]]..didinfo['extensions']..[["/>]]);
-	elseif(tonumber(didinfo['call_type']) == 2 and didinfo['extensions'] ~= '') then
-		table.insert(xml, [[<action application="set" data="calltype=OTHER"/>]]); 
-		table.insert(xml, [[<action application="bridge" data="]]..didinfo['extensions']..[["/>]]);
-	else
+		
+	elseif(tonumber(didinfo['call_type']) == 4 and didinfo['extensions'] ~= '') then
+                table.insert(xml, [[<action application="set" data="calltype=DIRECT-IP"/>]]);
+                table.insert(xml, [[<action application="bridge" data="sofia/default/]]..destination_number..[[@]]..didinfo['extensions']..[["/>]]);
+				
+	elseif(tonumber(didinfo['call_type']) == 5 and didinfo['extensions'] ~= '') then
+                table.insert(xml, [[<action application="set" data="calltype=DID@IP"/>]]);
+                table.insert(xml, [[<action application="bridge" data="sofia/default/]]..didinfo['extensions']..[["/>]]);
+	
+	--else
 		--error_xml_without_cdr(destination_number,"DID_DESTINATION_NOT_FOUND","DID",config['playback_audio_notification'],userinfo['number'])
 
 	end
