@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
 
 		?>
 			<a class="navbar-brand no-padding margin-t-15" href="<?php echo base_url();?>dashboard/">
-                	<img id="logo" alt="dashboard" src="<?php echo base_url();?>upload/<?= $user_logo?>" width="187" height="71" border="0">
+                	<img id="logo" alt="dashboard" src="<?php echo base_url();?>upload/<?= $user_logo?>" class="img-responsive" border="0">
 	      <? } else{
 			$user_logo = $this->session->userdata('user_logo');	
 			if(!isset($user_logo) && $user_logo=='') { 
@@ -109,7 +109,7 @@ jQuery(document).ready(function() {
 			}
 		?> 
                 	<a class="navbar-brand no-padding margin-t-15" href="<?php echo base_url();?>user/user/">
-                	<img id="logo" alt="user_logo" src="<?php echo base_url();?>upload/<?= $user_logo?>" width="187" height="71" border="0">
+                	<img id="logo" alt="user_logo" src="<?php echo base_url();?>upload/<?= $user_logo?>" class="img-responsive" border="0">
 		<? }?>
                 </a>
               
