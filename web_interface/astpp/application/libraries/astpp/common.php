@@ -391,20 +391,20 @@ class common {
     }
 
     function set_call_type($call_type = "") {
-        $call_type_array = array("-1" => "--Select--",'1' => 'DID-Local',"3"=>"SIP-DID", '0' => 'PSTN',  '2' => 'Other',);
+        $call_type_array = array("-1" => "--Select--",'1' => 'DID-Local','3'=>'SIP-DID','4'=>'Direct-IP','5'=>'DID@IP/URL', '0' => 'PSTN',  '2' => 'Other',);
         return $call_type_array;
     }
     function set_call_type_search(){
-	$call_type_array = array("" => "--Select--",'1' => 'DID-Local',"3"=>"SIP-DID", '0' => 'PSTN',  '2' => 'Other',);
+	$call_type_array = array("" => "--Select--",'1' => 'DID-Local','3'=>'SIP-DID','4'=>'Direct-IP','5'=>'DID@IP/URL', '0' => 'PSTN',  '2' => 'Other',);
         return $call_type_array;
     }
     function get_call_type($select = "", $table = "", $call_type) {
-        $call_type_array = array('1' => 'DID-Local',"3"=>"SIP-DID",'0' => 'PSTN',  '2' => 'Other','-1'=>"");
+        $call_type_array = array('1' => 'DID-Local','3'=>'SIP-DID','4'=>'Direct-IP','5'=>'DID@IP/URL','0' => 'PSTN',  '2' => 'Other','-1'=>"");
         return $call_type_array[$call_type];
     }
 
     function get_custom_call_type($call_type) {
-        $call_type_array = array('DID-Local' => '1',"SIP-DID"=>"3",'PSTN' => '0','Other' => '2',""=>"-1");
+        $call_type_array = array('DID-Local' => '1','SIP-DID'=>'3','Direct-IP'=>'4','DID@IP/URL'=>'5','PSTN' => '0','Other' => '2',""=>"-1");
         return $call_type_array[$call_type];
     }
 
