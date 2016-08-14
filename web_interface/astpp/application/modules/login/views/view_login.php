@@ -51,7 +51,7 @@
                           <div class="padding-l-32 padding-r-32">
                         	<h2 class="text-center">
                           
-                            	<img alt="login" src="<?= base_url() ?>upload/<?= $user_logo?>" style="height:auto;widht:auto;">
+                            	<img alt="login" src="<?= base_url() ?>upload/<?= $user_logo?>" class="img-responsive center-block">
                             	<div class="clear"></div>
                             
                             </h2>
