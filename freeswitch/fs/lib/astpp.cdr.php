@@ -113,15 +113,16 @@ function process_cdr($data,$db,$logger,$decimal_points)
 	
     //Outbound call entry for all type of calls 
 	$logger->log("*********************** OUTBOUND CALL ENTRY START *************");
-
-	$cdr_string = get_cdr_string($dataVariable,$accountid,$account_type,$actual_duration,$termination_rate,$origination_rate,$provider_cost,$parentid,$debit,$cost,$logger);
-
-	$query = "INSERT INTO cdrs (uniqueid,accountid,type,callerid,callednum,billseconds,trunk_id,trunkip,callerip,disposition,callstart,debit,cost,provider_id,pricelist_id,package_id,pattern,notes,rate_cost,reseller_id,reseller_code,reseller_code_destination,reseller_cost,provider_code,provider_code_destination,provider_cost,provider_call_cost,call_direction,calltype,profile_start_stamp,answer_stamp,bridge_stamp,progress_stamp,progress_media_stamp,end_stamp,billmsec,answermsec,waitmsec,progress_mediamsec,flow_billmsec)  values ($cdr_string)";
-	$logger->log($query);
-	$db->run($query);
 	
+	$cdr_string = get_cdr_string($dataVariable,$accountid,$account_type,$actual_duration,$termination_rate,$origination_rate,$provider_cost,$parentid,$debit,$cost,$logger);
+	if($account_type == 0 && $dataVariable['provider_id'] != 0)
+		{
+			$query = "INSERT INTO cdrs (uniqueid,accountid,type,callerid,callednum,billseconds,trunk_id,trunkip,callerip,disposition,callstart,debit,cost,provider_id,pricelist_id,package_id,pattern,notes,rate_cost,reseller_id,reseller_code,reseller_code_destination,reseller_cost,provider_code,provider_code_destination,provider_cost,provider_call_cost,call_direction,calltype,profile_start_stamp,answer_stamp,bridge_stamp,progress_stamp,progress_media_stamp,end_stamp,billmsec,answermsec,waitmsec,progress_mediamsec,flow_billmsec)  values ($cdr_string)";
+			$logger->log($query);
+			$db->run($query);
+		}
     //Update customer balance
-	if($debit > 0 && $dataVariable['calltype'] != "FREE")
+	if($debit > 0 && $dataVariable['calltype'] != "FREE" && $account_type == 0 && $dataVariable['provider_id'] != 0)
 	{
 		update_balance($accountid, $debit, 0, $logger, $db);
 	}
